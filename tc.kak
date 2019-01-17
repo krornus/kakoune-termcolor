@@ -2,6 +2,14 @@ declare-option -hidden range-specs termcolor_ansi
 
 add-highlighter shared/termcolor group
 
+hook -group auto-term-color global BufCloseFifo .* %{
+    try %{
+        execute-keys %{/\x1b\[[0-9;]*m<ret>}
+        set-option buffer filetype tc
+    }
+}
+
+
 define-command hide-colorcodes %{ evaluate-commands -draft %{
     # might already exist - cant do this globally due to window scope
     try %{ add-highlighter window/termcolor-colorcodes replace-ranges termcolor_ansi }
